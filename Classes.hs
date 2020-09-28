@@ -11,15 +11,6 @@ fancySeven = 3 + 4
 fancyEight :: Float
 fancyEight = 3.2 + 4.8
 
-x1 :: Double
-x1 = 1 / 10 + 2 / 10
-
-x2 :: Double
-x2 = fromRational rat
-  where
-    rat :: Rational
-    rat = 1 / 10 + 2 / 10
-
 data PrimaryColor = Red | Green | Blue
 
 instance Eq PrimaryColor where
@@ -101,10 +92,6 @@ tenToThirty = [10 .. 30]
 
 abcde :: [Char]
 abcde = ['a' .. 'e']
-
-wat = [0.8 .. 10]
-
-wat' = [0.5 .. 10]
 
 biggestInt :: Int
 biggestInt = maxBound
