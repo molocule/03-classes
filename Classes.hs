@@ -1,3 +1,6 @@
+{-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Classes where
 
 import Data.Char
@@ -99,7 +102,7 @@ biggestInt = maxBound
 instance Functor Tree where
   fmap = treeMap
     where
-      treeMap f Empty = Empty
+      treeMap _f Empty = Empty
       treeMap f (Branch x l r) = Branch (f x) (treeMap f l) (treeMap f r)
 
 data Two a = MkTwo a a deriving (Eq, Show, Read, Ord)

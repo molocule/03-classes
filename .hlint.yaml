@@ -13,9 +13,15 @@
 - ignore: {name: "Use tuple-section"}
 - ignore: {name: "Use product"}
 - ignore: {name: "Use sum"}
+- ignore: {name: "Use mconcat"}
 - ignore: {name: "Use list literal"}
 - ignore: {name: "Reduce duplication"}
 - ignore: {name: "Redundant return"}
 - ignore: {name: "Redundant lambda"}
 - ignore: {name: "Avoid lambda using `infix`"}
 - ignore: {name: "Replace case with fromMaybe"}
+- ignore: {name: "Use mconcat"}
+- ignore: {name: "Monoid law, left identity"}
+- ignore: {name: "Use ||"}
+- ignore: {name: "Unused LANGUAGE pragma"}
+
