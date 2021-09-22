@@ -1,6 +1,12 @@
+{-
+---
+fulltitle: "In class exercise: Semigroup, Monoid and Foldable"
+---
+-}
 {-# LANGUAGE DeriveFunctor #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# OPTIONS_GHC -fdefer-type-errors #-}
+
+-- {-# OPTIONS_GHC -fdefer-type-errors #-}
 
 module MonoidFoldable where
 
@@ -8,15 +14,60 @@ import qualified Data.List as List
 import Test.HUnit
 import Prelude hiding (all, and, any, or)
 
+{-
+Monoids
+-------
+
+First, read just the 'Semigroups and Monoids' section of HW 03's
+[SortedList](../../../hw/hw03/SortedList.html) module.
+
+Note that this section defines the following function that tailors a fold
+operation to a specific instance of the `Monoid` class.
+-}
+
 foldList :: Monoid b => [b] -> b
 foldList = List.foldr (<>) mempty
+
+{-
+For example, because the `String` type is an instance of this class
+(using `++` for `mappend`) we can `foldList` a list of `String`s to
+a single string.
+-}
 
 tm0 :: Test
 tm0 = foldList ["C", "I", "S", "5", "5", "2"] ~?= "CIS552"
 
+{-
+The assignment shows you that numbers can instantiate this class in multiple
+ways.  Like numbers, `Booleans` can be made an instance of the `Monoid` class
+in two different ways.
+-}
+
 newtype And = And {getAnd :: Bool} deriving (Eq, Show)
 
 newtype Or = Or {getOr :: Bool} deriving (Eq, Show)
+
+{-
+Make sure that you understand these type definitions. We are defining a type
+`And` with single data constructor (also called `And`). The argument of this
+data constructor is a record with a single field, called `getAnd`. What this
+means is that `And` and `getAnd` allow us to convert `Bool`s to `And` and
+back.
+
+      λ> :t And
+      And :: Bool -> And
+      λ> :t getAnd
+      getAnd :: And -> Bool
+
+Above, `newtype` is like data, but is restricted to a single variant. It is
+typically used to create a new name for an existing type. This new name allows
+us to have multiple instances for the same type (as below) or to provide type
+abstraction (like `SortedList` in the HW).
+
+Your job is to complete these instances that can tell us whether any of the
+booleans in a list are true, or whether all of the booleans in a list are
+true. (See two test cases below for an example of the behavior.)
+-}
 
 anyT1 :: Test
 anyT1 = getOr (foldList (fmap Or [True, False, True])) ~?= True
@@ -35,6 +86,12 @@ instance Semigroup Or where
 
 instance Monoid Or where
   mempty = undefined
+
+{-
+Because `And` and `Or` wrap boolean values, we can be sure that our instances
+have the right properties by testing the truth tables.  (There are more
+concise to write these tests, but we haven't covered them yet.)
+-}
 
 monoidAnd :: Test
 monoidAnd =
@@ -70,8 +127,26 @@ monoidOr =
       mempty <> Or False ~?= Or False
     ]
 
+{-
+Foldable
+--------
+
+Now, read the section marked `The Foldable Typeclass` in the
+[MergeSort](../../../hw/hw03/MergeSort.html) module.
+
+We can use your Monoid instances for `Or` and `And` to generalize
+operations to any data structure.
+
+For example, we can generalize the `and` operation to any Foldable data
+structure using `foldMap`.
+-}
+
 and :: Foldable t => t Bool -> Bool
 and = getAnd . foldMap And
+
+{-
+Your job is to define these three related operations
+-}
 
 or :: Foldable t => t Bool -> Bool
 or = undefined
@@ -81,6 +156,10 @@ all f = undefined
 
 any :: Foldable t => (a -> Bool) -> t a -> Bool
 any f = undefined
+
+{-
+so that the following tests pass
+-}
 
 tf0 :: Test
 tf0 = or [True, False, False, True] ~?= True
@@ -97,21 +176,56 @@ tf3 = any (> 0) [1 :: Int, 2, 4, 18] ~?= True
 tf4 :: Test
 tf4 = any (> 0) [-1 :: Int, -2, -4, -18] ~?= False
 
+{-
+Application
+-----------
+
+Recall our familiar `Tree` type. Haskell can derive the `Functor` instance for this type so we ask it to do so.
+-}
+
 data Tree a = Empty | Branch a (Tree a) (Tree a) deriving (Eq, Functor)
+
+{-
+And here is an example `Tree`.
+-}
 
 t1 :: Tree String
 t1 = Branch "d" (Branch "b" (l "a") (l "c")) (Branch "f" (l "e") (l "g"))
   where
     l x = Branch x Empty Empty
 
+{-
+We *could* make this type an instance of `Foldable` using the definition of
+`foldrTree` from the TreeFolds module.
+
+But, for practice, complete the instance using `foldMap`.
+-}
+
 instance Foldable Tree where
   foldMap = undefined
+
+{-
+With this instance, we can for example, verify that all of the sample strings
+above have length 1.
+-}
 
 tt1 :: Test
 tt1 = all ((== 1) . length) t1 ~?= True
 
+{-
+Finally, look at the documentation for the
+[Foldable](https://hackage.haskell.org/package/base-4.10.0.0/docs/Data-Foldable.html)
+class and find some other tree operations that we get automatically for
+free.
+-}
+
 tt2 :: Test
 tt2 = undefined
+
+{-
+Oblig-main
+----------
+-}
 
 main :: IO ()
 main = do

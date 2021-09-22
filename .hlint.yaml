@@ -23,5 +23,4 @@
 - ignore: {name: "Use mconcat"}
 - ignore: {name: "Monoid law, left identity"}
 - ignore: {name: "Use ||"}
-- ignore: {name: "Unused LANGUAGE pragma"}
 

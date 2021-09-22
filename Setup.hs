@@ -1,1 +1,3 @@
-Setup.hs
+import Distribution.Simple
+
+main = defaultMain

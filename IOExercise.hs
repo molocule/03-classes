@@ -1,4 +1,19 @@
+{-
+---
+fulltitle: "In class exercise: IOExercise"
+---
+
+In-class exercise (IO Monad)
+-}
+
+module IOExercise where
+
 import System.FilePath
+
+{-
+Rewrite these programs so that they do not use 'do'.
+(Make sure that you do not change their behavior!)
+-}
 
 simpleProgram :: IO ()
 simpleProgram = do
