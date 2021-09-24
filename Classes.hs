@@ -164,9 +164,15 @@ by using 'deriving' like we saw in [`Lec4`](Lec4.html)!)
 
 -}
 
-instance Eq a => Eq (Tree a) where
+instance Eq a => Eq (Tree a, Num a) where
   (==) :: Tree a -> Tree a -> Bool
-  t1 == t2 = undefined
+  Empty == Empty = True
+  Branch a tr tr' == Branch b br br' = Branch a Empty Empty == Branch b Empty Empty && (==) tr br && (==) tr' br'
+  _ == _ = False
+
+  Empty /= Empty = False
+  Branch a tr tr' /= Branch b br br' = Branch a Empty Empty /= Branch b Empty Empty || (/=) tr br || (/=) tr' br'
+  _ /= _ = False
 
 {-
 This code tells Haskell how to compare `Tree a`s for equality as long
