@@ -15,18 +15,28 @@ Rewrite these programs so that they do not use 'do'.
 (Make sure that you do not change their behavior!)
 -}
 
+
+
+-- simpleProgram :: IO ()
+-- simpleProgram = do
+--   putStrLn "This is a simple program that does IO."
+--   putStrLn "What is your name?"
+--   inpStr <- getLine
+--   putStrLn $ "Welcome to Haskell, " ++ inpStr ++ "!"
+
 simpleProgram :: IO ()
-simpleProgram = do
-  putStrLn "This is a simple program that does IO."
-  putStrLn "What is your name?"
-  inpStr <- getLine
-  putStrLn $ "Welcome to Haskell, " ++ inpStr ++ "!"
+simpleProgram >>= 
+  putStrLn "This is a simple program that does IO." >>
+  putStrLn "What is your name?" >> 
+  getLine >>= (
+    \inpStr -> putStrLn $ "Welcome to Haskell, " ++ inpStr ++ "!"
+  )
 
 lengthProgram :: IO Int
-lengthProgram = do
-  let x = length [1, 2, 3, 4, 5, 6]
-  putStrLn $ "The length of the list is" ++ show x
-  return x
+lengthProgram = 
+  x >>= (length [1, 2, 3, 4, 5, 6] >> 
+  putStrLn $ "The length of the list is" ++ show x >>
+  return x)
 
 anotherProgram :: IO ()
 anotherProgram = do
